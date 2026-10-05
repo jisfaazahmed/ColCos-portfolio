@@ -183,6 +183,111 @@
       transform: translateY(2px);
     }
 
+    /* ── LIVE STORE INDICATOR & BUTTONS ── */
+    .live-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #10B981;
+      box-shadow: 0 0 8px #10B981;
+      display: inline-block;
+      flex-shrink: 0;
+      animation: livePulse 2s infinite ease-in-out;
+    }
+
+    @keyframes livePulse {
+      0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+        box-shadow: 0 0 8px #10B981;
+      }
+      50% {
+        opacity: 0.55;
+        transform: scale(0.85);
+        box-shadow: 0 0 3px #10B981;
+      }
+    }
+
+    .nav-live-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 14px;
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.32);
+      color: #A7F3D0;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 999px;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      white-space: nowrap;
+    }
+
+    .nav-live-btn:hover {
+      background: rgba(16, 185, 129, 0.18);
+      border-color: #10B981;
+      color: #FFFFFF;
+      box-shadow: 0 0 16px rgba(16, 185, 129, 0.35);
+      transform: translateY(-1px);
+    }
+
+    .nav-live-btn svg {
+      transition: transform 0.2s ease;
+    }
+
+    .nav-live-btn:hover svg {
+      transform: translate(2px, -2px);
+    }
+
+    .mobile-drawer-live-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      width: 100%;
+      padding: 12px 18px;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      color: #A7F3D0;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 999px;
+      text-decoration: none;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.15);
+      transition: all 0.2s ease;
+      touch-action: manipulation;
+    }
+
+    .mobile-drawer-live-btn:hover {
+      background: rgba(16, 185, 129, 0.2);
+      border-color: #10B981;
+      color: #FFFFFF;
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35);
+      transform: translateY(-1px);
+    }
+
+    .mobile-drawer-live-btn svg {
+      transition: transform 0.2s ease;
+    }
+
+    .mobile-drawer-live-btn:hover svg {
+      transform: translate(2px, -2px);
+    }
+
+    .footer-live-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #34D399 !important;
+    }
+
+    .footer-live-link:hover {
+      color: #A7F3D0 !important;
+      text-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+    }
+
     /* ── HAMBURGER TOGGLE BUTTON ── */
     .nav-toggle {
       display: none;
@@ -604,6 +709,30 @@
       border-color: var(--pink-border);
       color: var(--pink-light);
       transform: translateY(-2px);
+    }
+
+    .btn-live {
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.38);
+      color: #34D399;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 20px rgba(16, 185, 129, 0.18);
+    }
+
+    .btn-live:hover {
+      background: rgba(16, 185, 129, 0.22);
+      border-color: #10B981;
+      color: #FFFFFF;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(16, 185, 129, 0.38);
+    }
+
+    .btn-live svg {
+      transition: transform 0.2s ease;
+    }
+
+    .btn-live:hover svg {
+      transform: translate(2px, -2px);
     }
 
     .hero-badges {
@@ -1571,6 +1700,11 @@
         font-size: 11px;
       }
 
+      .nav-live-btn {
+        padding: 6px 12px;
+        font-size: 11px;
+      }
+
       .overview-grid,
       .process-grid {
         grid-template-columns: 1fr;
@@ -1627,8 +1761,9 @@
         letter-spacing: 1px;
       }
 
-      /* Keep header bar uncluttered on phones; full CTA is inside the mobile drawer */
-      .nav-actions .nav-cta {
+      /* Keep header bar uncluttered on phones; full actions are inside the mobile drawer */
+      .nav-actions .nav-cta,
+      .nav-actions .nav-live-btn {
         display: none;
       }
 
@@ -1714,6 +1849,15 @@
         <li><a href="#architecture">Architecture</a></li>
       </ul>
       <div class="nav-actions">
+        <a href="https://www.colombocosmetics.lk/" target="_blank" rel="noopener noreferrer" class="nav-live-btn" title="Visit Live Store — colombocosmetics.lk">
+          <span class="live-dot"></span>
+          <span>Live Store</span>
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </svg>
+        </a>
         <a href="#screens" class="nav-cta">
           <span>Explore Showcase</span>
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
@@ -1790,6 +1934,15 @@
           </a>
         </nav>
         <div class="mobile-drawer-cta-wrap">
+          <a href="https://www.colombocosmetics.lk/" target="_blank" rel="noopener noreferrer" class="mobile-drawer-live-btn">
+            <span class="live-dot"></span>
+            <span>Visit Live Store (colombocosmetics.lk)</span>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+          </a>
           <a href="#screens" class="mobile-drawer-cta">
             <span>Explore Production Showcase</span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -1812,7 +1965,7 @@
 
     <div class="hero-tag">
       <span class="hero-tag-dot"></span>
-      Full-Stack Beauty Commerce · Case Study 2026
+      Full-Stack Beauty Commerce · Case Study 2026 · <a href="https://www.colombocosmetics.lk/" target="_blank" rel="noopener noreferrer" style="color: var(--pink-light); text-decoration: underline; text-underline-offset: 3px;">Live Site ↗</a>
     </div>
 
     <h1 class="hero-title">
@@ -1828,6 +1981,16 @@
     </p>
 
     <div class="hero-buttons">
+      <a href="https://www.colombocosmetics.lk/" target="_blank" rel="noopener noreferrer" class="btn btn-live">
+        <span class="live-dot"></span>
+        <span>Visit Live Store</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+          <polyline points="15 3 21 3 21 9"></polyline>
+          <line x1="10" y1="14" x2="21" y2="3"></line>
+        </svg>
+      </a>
       <a href="#screens" class="btn btn-primary">
         <span>View Production Screens</span>
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
@@ -1988,7 +2151,7 @@
             straining daily operations.
           </p>
           <p>
-            <strong>The Solution:</strong> We architected and delivered a full-stack e-commerce web platform optimized
+            <strong>The Solution:</strong> We architected and delivered a full-stack e-commerce web platform (<a href="https://www.colombocosmetics.lk/" target="_blank" rel="noopener noreferrer" style="color: var(--pink-light); text-decoration: underline; text-underline-offset: 3px;">colombocosmetics.lk ↗</a>) optimized
             for mobile shopping. Customers enjoy high-speed browsing of skincare, luxury perfumes, attars, and beauty
             bundles with instant search and transparent delivery tracking.
           </p>
@@ -2932,6 +3095,10 @@
       <div class="footer-logo">Colombo <em>Cosmetics</em></div>
       <div class="footer-tagline">Your Beauty and Fragrance Companion · 2026</div>
       <div class="footer-links">
+        <a href="https://www.colombocosmetics.lk/" target="_blank" rel="noopener noreferrer" class="footer-live-link">
+          <span class="live-dot" style="width: 6px; height: 6px;"></span>
+          <span>Live Store (colombocosmetics.lk) ↗</span>
+        </a>
         <a href="#hero">Back to Top</a>
         <a href="#overview">Overview</a>
         <a href="#screens">Screens Gallery</a>
