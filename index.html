@@ -1,0 +1,2598 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Colombo Cosmetics — Full-Stack E-Commerce & Store Operations Case Study</title>
+  <meta name="description"
+    content="Case study of Colombo Cosmetics: a full-stack beauty commerce platform and store management workspace built with React 19, TanStack Start, Supabase, and Payments.lk.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --pink: #F02D7D;
+      --pink-glow: #FF4D97;
+      --pink-light: #FF85B8;
+      --pink-pale: #FFF0F6;
+      --pink-dim: rgba(240, 45, 125, 0.12);
+      --pink-border: rgba(240, 45, 125, 0.28);
+      --navy-950: #060B12;
+      --navy-900: #0B1320;
+      --navy-800: #121E30;
+      --navy-700: #1C2C44;
+      --gray-400: #94A3B8;
+      --gray-300: #CBD5E1;
+      --gray-100: #F1F5F9;
+      --white: #FFFFFF;
+      --gold: #D4AF37;
+      --card-bg: rgba(18, 30, 48, 0.65);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-sans: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'DM Mono', monospace;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      color-scheme: dark;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--navy-950);
+      color: var(--gray-100);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      background-image:
+        radial-gradient(at 10% 10%, rgba(240, 45, 125, 0.07) 0px, transparent 50%),
+        radial-gradient(at 90% 90%, rgba(240, 45, 125, 0.05) 0px, transparent 50%);
+      background-attachment: fixed;
+    }
+
+    /* ── HEADER / NAVIGATION ── */
+    .site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(6, 11, 18, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      transition: all 0.3s ease;
+    }
+
+    .nav-container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-link {
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo-text {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--white);
+      letter-spacing: -0.5px;
+    }
+
+    .brand-logo-text span {
+      color: var(--pink);
+      font-style: italic;
+    }
+
+    .brand-pill {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      padding: 3px 9px;
+      background: var(--pink-dim);
+      border: 1px solid var(--pink-border);
+      color: var(--pink-light);
+      border-radius: 999px;
+      display: inline-block;
+    }
+
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-menu a {
+      color: var(--gray-400);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+
+    .nav-menu a:hover {
+      color: var(--white);
+    }
+
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 18px;
+      background: linear-gradient(135deg, var(--pink), var(--pink-glow));
+      color: var(--white);
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 999px;
+      text-decoration: none;
+      box-shadow: 0 4px 18px rgba(240, 45, 125, 0.35);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .nav-cta:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 24px rgba(240, 45, 125, 0.5);
+    }
+
+    .nav-cta svg {
+      transition: transform 0.2s ease;
+    }
+
+    .nav-cta:hover svg {
+      transform: translateY(2px);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 88vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 90px 24px 70px;
+      overflow: hidden;
+    }
+
+    .hero-glow-1 {
+      position: absolute;
+      width: 650px;
+      height: 650px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(240, 45, 125, 0.18) 0%, transparent 70%);
+      top: -150px;
+      left: 50%;
+      transform: translateX(-50%);
+      pointer-events: none;
+      filter: blur(40px);
+      animation: heroFloat 8s ease-in-out infinite alternate;
+    }
+
+    .hero-glow-2 {
+      position: absolute;
+      width: 450px;
+      height: 450px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 133, 184, 0.10) 0%, transparent 70%);
+      bottom: 20px;
+      right: 10%;
+      pointer-events: none;
+      filter: blur(50px);
+    }
+
+    @keyframes heroFloat {
+      0% {
+        transform: translateX(-50%) translateY(0) scale(1);
+      }
+
+      100% {
+        transform: translateX(-48%) translateY(25px) scale(1.08);
+      }
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 18px;
+      background: rgba(240, 45, 125, 0.08);
+      border: 1px solid var(--pink-border);
+      border-radius: 999px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--pink-light);
+      margin-bottom: 28px;
+      backdrop-filter: blur(8px);
+    }
+
+    .hero-tag-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--pink);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--pink);
+      animation: pulseDot 2s infinite;
+    }
+
+    @keyframes pulseDot {
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.4;
+        transform: scale(0.8);
+      }
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(48px, 8.5vw, 102px);
+      font-weight: 400;
+      line-height: 1.02;
+      letter-spacing: -1.5px;
+      color: var(--white);
+      margin-bottom: 12px;
+      max-width: 1000px;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      background: linear-gradient(135deg, var(--pink-light), var(--pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      padding-right: 4px;
+    }
+
+    .hero-tagline {
+      font-family: var(--font-sans);
+      font-size: clamp(14px, 2.2vw, 19px);
+      font-weight: 500;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--pink-light);
+      margin-bottom: 24px;
+      opacity: 0.95;
+    }
+
+    .hero-desc {
+      font-size: clamp(15px, 1.8vw, 17px);
+      color: var(--gray-400);
+      max-width: 680px;
+      line-height: 1.85;
+      margin-bottom: 40px;
+      font-weight: 300;
+    }
+
+    .hero-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: center;
+      margin-bottom: 46px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 13px 28px;
+      border-radius: 999px;
+      font-size: 13.5px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--pink), var(--pink-glow));
+      color: var(--white);
+      box-shadow: 0 8px 30px rgba(240, 45, 125, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 38px rgba(240, 45, 125, 0.6);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--white);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(10px);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--pink-border);
+      color: var(--pink-light);
+      transform: translateY(-2px);
+    }
+
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      max-width: 950px;
+    }
+
+    .badge-chip {
+      padding: 8px 16px;
+      background: rgba(18, 30, 48, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 999px;
+      font-size: 12px;
+      color: var(--gray-300);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      backdrop-filter: blur(6px);
+      transition: all 0.2s ease;
+    }
+
+    .badge-chip:hover {
+      border-color: var(--pink-border);
+      color: var(--white);
+      background: rgba(240, 45, 125, 0.08);
+    }
+
+    .badge-chip .logo-icon {
+      width: 15px;
+      height: 15px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .badge-chip .logo-icon svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* ── METRICS STRIP ── */
+    .metrics-bar {
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      background: rgba(11, 19, 32, 0.7);
+      backdrop-filter: blur(12px);
+    }
+
+    .metrics-container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 34px 24px;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 24px;
+    }
+
+    .metric-item {
+      text-align: center;
+      position: relative;
+    }
+
+    .metric-item:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 20%;
+      height: 60%;
+      width: 1px;
+      background: rgba(255, 255, 255, 0.07);
+    }
+
+    .metric-value {
+      font-family: var(--font-display);
+      font-size: clamp(32px, 4vw, 44px);
+      font-weight: 600;
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, var(--white), var(--pink-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .metric-label {
+      font-size: 11.5px;
+      font-weight: 500;
+      color: var(--gray-400);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* ── COMMON SECTION HEADERS ── */
+    section {
+      padding: 100px 24px;
+      position: relative;
+    }
+
+    .section-wrap {
+      max-width: 1240px;
+      margin: 0 auto;
+    }
+
+    .section-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--pink);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .section-eyebrow::before {
+      content: '';
+      width: 14px;
+      height: 1px;
+      background: var(--pink);
+    }
+
+    .section-heading {
+      font-family: var(--font-display);
+      font-size: clamp(34px, 4.5vw, 54px);
+      font-weight: 400;
+      line-height: 1.12;
+      color: var(--white);
+      margin-bottom: 20px;
+      letter-spacing: -0.5px;
+    }
+
+    .section-heading em {
+      font-style: italic;
+      color: var(--pink-light);
+    }
+
+    .section-sub {
+      font-size: 15.5px;
+      color: var(--gray-400);
+      max-width: 620px;
+      line-height: 1.8;
+      font-weight: 300;
+    }
+
+    /* ── OVERVIEW STORY ── */
+    .overview-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 60px;
+      align-items: center;
+      margin-top: 52px;
+    }
+
+    .overview-text p {
+      font-size: 14.5px;
+      color: var(--gray-300);
+      line-height: 1.9;
+      margin-bottom: 20px;
+      font-weight: 300;
+    }
+
+    .overview-text p strong {
+      color: var(--white);
+      font-weight: 600;
+    }
+
+    .overview-card-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .highlight-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 24px 28px;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .highlight-card:hover {
+      border-color: var(--pink-border);
+      transform: translateX(6px);
+      background: rgba(24, 38, 60, 0.7);
+    }
+
+    .highlight-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 3px;
+      background: linear-gradient(to bottom, var(--pink), transparent);
+    }
+
+    .highlight-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .highlight-icon-box {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: var(--pink-dim);
+      border: 1px solid var(--pink-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--pink-light);
+      flex-shrink: 0;
+    }
+
+    .highlight-icon-box svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    .highlight-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--white);
+    }
+
+    .highlight-desc {
+      font-size: 13px;
+      color: var(--gray-400);
+      line-height: 1.7;
+    }
+
+    /* ── GALLERY FILTER TABS ── */
+    .screens-container {
+      margin-top: 48px;
+    }
+
+    .filter-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 40px;
+    }
+
+    .filter-btn {
+      padding: 9px 20px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      color: var(--gray-400);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: var(--font-sans);
+    }
+
+    .filter-btn:hover {
+      color: var(--white);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .filter-btn.active {
+      background: linear-gradient(135deg, var(--pink), var(--pink-glow));
+      color: var(--white);
+      border-color: transparent;
+      box-shadow: 0 4px 20px rgba(240, 45, 125, 0.35);
+    }
+
+    /* ── SCREEN CARDS GRID ── */
+    .screens-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+
+    .screen-item {
+      position: relative;
+      background: #0A121E;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 26px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .screen-item:hover {
+      transform: translateY(-8px);
+      border-color: var(--pink-border);
+      box-shadow: 0 24px 50px rgba(240, 45, 125, 0.22);
+    }
+
+    .screen-preview-wrapper {
+      position: relative;
+      width: 100%;
+      background: #000;
+      overflow: hidden;
+      padding-top: 140%;
+      /* 1:1.4 aspect ratio for tall mobile view */
+    }
+
+    .screen-preview-img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      transition: transform 0.5s ease;
+    }
+
+    .screen-item:hover .screen-preview-img {
+      transform: scale(1.04);
+    }
+
+    .screen-click-hint {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: rgba(6, 11, 18, 0.8);
+      backdrop-filter: blur(8px);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--pink-light);
+      border: 1px solid rgba(240, 45, 125, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      opacity: 0;
+      transform: translateY(-6px);
+      transition: all 0.3s ease;
+    }
+
+    .screen-click-hint svg {
+      width: 13px;
+      height: 13px;
+    }
+
+    .screen-item:hover .screen-click-hint {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .screen-info {
+      padding: 20px 20px 22px;
+      background: linear-gradient(180deg, #0D1726 0%, #090F1A 100%);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .screen-category-tag {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--pink);
+      margin-bottom: 6px;
+    }
+
+    .screen-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+
+    .screen-desc {
+      font-size: 12px;
+      color: var(--gray-400);
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+
+    .screen-meta-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .screen-pill {
+      font-size: 10.5px;
+      padding: 3px 8px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 6px;
+      color: var(--gray-300);
+    }
+
+    /* ── LIGHTBOX MODAL ── */
+    .lightbox-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(4, 8, 14, 0.94);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .lightbox-modal.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .lightbox-content {
+      display: grid;
+      grid-template-columns: auto 400px;
+      background: #0B1320;
+      border: 1px solid var(--pink-border);
+      border-radius: 28px;
+      overflow: hidden;
+      max-width: 1050px;
+      max-height: 90vh;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
+      position: relative;
+      transform: scale(0.96);
+      transition: transform 0.3s ease;
+    }
+
+    .lightbox-modal.active .lightbox-content {
+      transform: scale(1);
+    }
+
+    .lightbox-img-pane {
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      overflow-y: auto;
+      max-height: 85vh;
+    }
+
+    .lightbox-img {
+      max-height: 80vh;
+      max-width: 420px;
+      width: auto;
+      height: auto;
+      border-radius: 18px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .lightbox-sidebar {
+      padding: 40px 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow-y: auto;
+      background: #0E1828;
+      border-left: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .lightbox-close-btn {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: var(--white);
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      z-index: 10;
+    }
+
+    .lightbox-close-btn:hover {
+      background: var(--pink);
+      border-color: var(--pink);
+    }
+
+    .lightbox-category {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--pink-light);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+
+    .lightbox-title {
+      font-family: var(--font-display);
+      font-size: 28px;
+      color: var(--white);
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+
+    .lightbox-description {
+      font-size: 14px;
+      color: var(--gray-300);
+      line-height: 1.8;
+      margin-bottom: 24px;
+    }
+
+    .lightbox-spec-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 30px;
+    }
+
+    .lightbox-spec-list li {
+      font-size: 13px;
+      color: var(--gray-300);
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      line-height: 1.6;
+    }
+
+    .lightbox-spec-list li .spec-bullet {
+      width: 14px;
+      height: 14px;
+      color: var(--pink);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* ── DEEP FEATURES MATRIX ── */
+    .features-section {
+      background: rgba(11, 19, 32, 0.5);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 56px;
+    }
+
+    .feature-box {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 22px;
+      padding: 34px 28px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .feature-box:hover {
+      border-color: var(--pink-border);
+      transform: translateY(-5px);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .feature-box-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: var(--pink-dim);
+      border: 1px solid var(--pink-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 22px;
+      color: var(--pink-light);
+    }
+
+    .feature-box-icon svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .feature-box-title {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--white);
+      margin-bottom: 12px;
+      line-height: 1.25;
+    }
+
+    .feature-box-text {
+      font-size: 13.5px;
+      color: var(--gray-400);
+      line-height: 1.8;
+      margin-bottom: 20px;
+      flex: 1;
+    }
+
+    .feature-box-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag-sm {
+      font-size: 11px;
+      font-family: var(--font-mono);
+      padding: 3px 9px;
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 6px;
+      color: var(--gray-300);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    /* ── TECH STACK ── */
+    .tech-stack-section {
+      position: relative;
+    }
+
+    .tech-category-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 28px;
+      margin-top: 56px;
+    }
+
+    .tech-group-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 32px 30px;
+      backdrop-filter: blur(10px);
+      transition: border-color 0.3s ease;
+    }
+
+    .tech-group-card:hover {
+      border-color: rgba(240, 45, 125, 0.28);
+    }
+
+    .tech-group-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .tech-group-title {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .tech-group-header-icon {
+      width: 18px;
+      height: 18px;
+      color: var(--pink-light);
+    }
+
+    .tech-group-tag {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--pink-light);
+      background: var(--pink-dim);
+      border: 1px solid var(--pink-border);
+      padding: 3px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .tech-items-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .tech-pill-box {
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.25s ease;
+    }
+
+    .tech-pill-box:hover {
+      background: rgba(240, 45, 125, 0.08);
+      border-color: var(--pink-border);
+      transform: translateX(4px);
+    }
+
+    .tech-pill-logo {
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .tech-pill-logo svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .tech-pill-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--white);
+    }
+
+    .tech-pill-role {
+      font-size: 11px;
+      color: var(--gray-400);
+    }
+
+    /* ── PROCESS & ARCHITECT ── */
+    .process-section {
+      background: rgba(11, 19, 32, 0.5);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .process-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 60px;
+      margin-top: 56px;
+      align-items: start;
+    }
+
+    .process-timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+      position: relative;
+    }
+
+    .process-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 24px 28px;
+      display: flex;
+      gap: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .process-card:hover {
+      border-color: var(--pink-border);
+      transform: translateX(6px);
+    }
+
+    .process-step-badge {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--pink-light);
+      background: var(--pink-dim);
+      border: 1px solid var(--pink-border);
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .process-content h4 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 6px;
+    }
+
+    .process-content p {
+      font-size: 13px;
+      color: var(--gray-400);
+      line-height: 1.7;
+    }
+
+    .architect-card {
+      background: linear-gradient(180deg, rgba(240, 45, 125, 0.1) 0%, rgba(18, 30, 48, 0.7) 100%);
+      border: 1px solid var(--pink-border);
+      border-radius: 26px;
+      padding: 40px 34px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .architect-card h3 {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 500;
+      color: var(--white);
+      margin-bottom: 20px;
+    }
+
+    .architect-card p {
+      font-size: 14px;
+      color: var(--gray-300);
+      line-height: 1.8;
+      margin-bottom: 24px;
+    }
+
+    .role-bullet-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .role-bullet-list li {
+      font-size: 13.5px;
+      color: var(--gray-300);
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      line-height: 1.6;
+    }
+
+    .role-bullet-list li .role-marker {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--pink);
+      margin-top: 8px;
+      flex-shrink: 0;
+      box-shadow: 0 0 8px var(--pink);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      background: #05090F;
+      padding: 70px 24px 50px;
+      text-align: center;
+    }
+
+    .footer-logo {
+      font-family: var(--font-display);
+      font-size: 34px;
+      font-weight: 400;
+      color: var(--white);
+      margin-bottom: 10px;
+    }
+
+    .footer-logo em {
+      font-style: italic;
+      color: var(--pink);
+    }
+
+    .footer-tagline {
+      font-size: 12px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gray-400);
+      margin-bottom: 28px;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 28px;
+      margin-bottom: 36px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      color: var(--gray-400);
+      text-decoration: none;
+      font-size: 13px;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--pink-light);
+    }
+
+    .footer-copy {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: rgba(148, 163, 184, 0.5);
+      letter-spacing: 1px;
+    }
+
+    /* ── RESPONSIVE MEDIA QUERIES ── */
+    @media (max-width: 1080px) {
+      .screens-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .metrics-container {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+      }
+
+      .metric-item:nth-child(3)::after {
+        display: none;
+      }
+
+      .tech-category-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 860px) {
+      .nav-menu {
+        display: none;
+      }
+
+      .overview-grid,
+      .process-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .screens-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .metrics-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .metric-item:nth-child(2)::after {
+        display: none;
+      }
+
+      .lightbox-content {
+        grid-template-columns: 1fr;
+        max-height: 94vh;
+      }
+
+      .lightbox-img-pane {
+        padding: 16px;
+        max-height: 50vh;
+      }
+
+      .lightbox-sidebar {
+        padding: 24px 20px;
+      }
+    }
+
+    @media (max-width: 540px) {
+      .screens-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .metrics-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .metric-item::after {
+        display: none !important;
+      }
+
+      .tech-items-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding-top: 60px;
+      }
+
+      .hero-buttons {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- STICKY TOP NAVIGATION -->
+  <header class="site-nav">
+    <div class="nav-container">
+      <a href="#hero" class="brand-link">
+        <div class="brand-logo-text">Colombo <span>Cosmetics</span></div>
+        <div class="brand-pill">Case Study</div>
+      </a>
+      <ul class="nav-menu">
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#screens">Screens</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#tech">Tech Stack</a></li>
+        <li><a href="#architecture">Architecture</a></li>
+      </ul>
+      <a href="#screens" class="nav-cta">
+        <span>Explore Showcase</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <polyline points="19 12 12 19 5 12"></polyline>
+        </svg>
+      </a>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="hero" id="hero">
+    <div class="hero-glow-1"></div>
+    <div class="hero-glow-2"></div>
+
+    <div class="hero-tag">
+      <span class="hero-tag-dot"></span>
+      Full-Stack Beauty Commerce · Case Study 2026
+    </div>
+
+    <h1 class="hero-title">
+      Colombo <em>Cosmetics</em>
+    </h1>
+
+    <div class="hero-tagline">Your Beauty and Fragrance Companion</div>
+
+    <p class="hero-desc">
+      A modern, full-stack cosmetics and fragrance e-commerce web platform and authenticated merchant control system
+      built for Sri Lanka. Featuring SSR-first performance, localized checkout (COD & Payments.lk card), atomic
+      inventory controls, and an administrative operations hub.
+    </p>
+
+    <div class="hero-buttons">
+      <a href="#screens" class="btn btn-primary">
+        <span>View Production Screens</span>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </a>
+      <a href="#overview" class="btn btn-secondary">
+        <span>Platform Overview</span>
+      </a>
+      <a href="#tech" class="btn btn-secondary">
+        <span>Tech Stack</span>
+      </a>
+    </div>
+
+    <!-- TECH BADGES WITH CLEAN SVG LOGOS (NO EMOJIS) -->
+    <div class="hero-badges">
+      <div class="badge-chip">
+        <span class="logo-icon">
+          <svg viewBox="-11.5 -10.2 23 20.4" fill="none">
+            <circle cx="0" cy="0" r="2.05" fill="#58C4DC" />
+            <g stroke="#58C4DC" stroke-width="1">
+              <ellipse rx="11" ry="4.2" />
+              <ellipse rx="11" ry="4.2" transform="rotate(60)" />
+              <ellipse rx="11" ry="4.2" transform="rotate(120)" />
+            </g>
+          </svg>
+        </span>
+        React 19 + TypeScript
+      </div>
+
+      <div class="badge-chip">
+        <span class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#FF4154" stroke-width="2.2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+            <polyline points="2 17 12 22 22 17"></polyline>
+            <polyline points="2 12 12 17 22 12"></polyline>
+          </svg>
+        </span>
+        TanStack Start (SSR)
+      </div>
+
+      <div class="badge-chip">
+        <span class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path
+              d="M21.5 3.5L12.7 21a.8.8 0 01-1.4 0L2.5 3.5a.8.8 0 01.9-1.1l8.3 1.7a.8.8 0 00.3 0l8.6-1.7a.8.8 0 01.9 1.1z"
+              fill="url(#heroVite)" />
+            <path d="M15.5 2.5L7.2 13.8a.4.4 0 00.3.6h4.3l-1.5 5.8a.4.4 0 00.7.3l7.6-11.2a.4.4 0 00-.3-.6h-4l1.2-6.2z"
+              fill="#FFD026" />
+            <defs>
+              <linearGradient id="heroVite" x1="2" y1="2" x2="22" y2="21" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#41D1FF" />
+                <stop offset="1" stop-color="#BD34FE" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </span>
+        Vite & Nitro Server
+      </div>
+
+      <div class="badge-chip">
+        <span class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path
+              d="M13.4 2.1a1 1 0 00-1.6.8v8.6h8.2a1 1 0 01.7 1.7L10.6 23.3a1 1 0 01-1.6-.8v-8.6H.8a1 1 0 01-.7-1.7L13.4 2.1z"
+              fill="url(#heroSupa)" />
+            <defs>
+              <linearGradient id="heroSupa" x1="0" y1="2" x2="21" y2="23" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#3ECF8E" />
+                <stop offset="1" stop-color="#24B47E" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </span>
+        Supabase PostgreSQL + RLS
+      </div>
+
+      <div class="badge-chip">
+        <span class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#F02D7D" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+            <line x1="2" y1="10" x2="22" y2="10"></line>
+          </svg>
+        </span>
+        Payments.lk + Cash on Delivery
+      </div>
+
+      <div class="badge-chip">
+        <span class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#A78BFA" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            <path d="M9 12l2 2 4-4"></path>
+          </svg>
+        </span>
+        2FA Authenticator Admin Gate
+      </div>
+
+      <div class="badge-chip">
+        <span class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M12 2a8 8 0 00-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 00-8-8z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+        </span>
+        Island-wide Sri Lanka Delivery
+      </div>
+    </div>
+  </section>
+
+  <!-- METRICS STRIP -->
+  <div class="metrics-bar">
+    <div class="metrics-container">
+      <div class="metric-item">
+        <div class="metric-value">126+</div>
+        <div class="metric-label">Products in Catalog</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-value">Dual</div>
+        <div class="metric-label">Payment Methods (COD & Card)</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-value">8</div>
+        <div class="metric-label">Core Production Screens</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-value">100%</div>
+        <div class="metric-label">Island-Wide Delivery</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-value">SSR</div>
+        <div class="metric-label">Sub-Second Page Loads</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 01: OVERVIEW & PROBLEM STATEMENT -->
+  <section id="overview">
+    <div class="section-wrap">
+      <div class="section-eyebrow">01 — Platform Overview</div>
+      <h2 class="section-heading">Built to modernize<br><em>Sri Lankan beauty commerce</em></h2>
+      <p class="section-sub">
+        Transforming fragmented social media commerce and manual spreadsheets into a seamless, high-converting digital
+        storefront and unified merchant operations center.
+      </p>
+
+      <div class="overview-grid">
+        <div class="overview-text">
+          <p>
+            <strong>The Challenge:</strong> Colombo Cosmetics was experiencing rapid growth across Sri Lanka through
+            social channels and messaging apps. However, managing inventory counts, calculating profit margins,
+            processing card and Cash on Delivery payments, and manually answering order inquiries on WhatsApp was
+            straining daily operations.
+          </p>
+          <p>
+            <strong>The Solution:</strong> We architected and delivered a full-stack e-commerce web platform optimized
+            for mobile shopping. Customers enjoy high-speed browsing of skincare, luxury perfumes, attars, and beauty
+            bundles with instant search and transparent delivery tracking.
+          </p>
+          <p>
+            <strong>The Engine Behind the Store:</strong> An authenticated merchant command center empowers
+            administrators with real-time sales analytics, multi-variant inventory control, automated coupon generation,
+            hero banner scheduling, and customer support audit trails — secured with multi-factor authenticator
+            verification.
+          </p>
+        </div>
+
+        <div class="overview-card-stack">
+          <!-- Storefront highlight -->
+          <div class="highlight-card">
+            <div class="highlight-header">
+              <div class="highlight-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"></path>
+                  <line x1="3" y1="6" x2="21" y2="6"></line>
+                  <path d="M16 10a4 4 0 01-8 0"></path>
+                </svg>
+              </div>
+              <div class="highlight-title">Consumer Storefront</div>
+            </div>
+            <div class="highlight-desc">
+              Frictionless browsing across skincare, attars, and cosmetics with real-time stock availability, verified
+              reviews, variant pickers, and persistent drawer cart.
+            </div>
+          </div>
+
+          <!-- Checkout highlight -->
+          <div class="highlight-card">
+            <div class="highlight-header">
+              <div class="highlight-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+                  <line x1="2" y1="10" x2="22" y2="10"></line>
+                </svg>
+              </div>
+              <div class="highlight-title">Localized Checkout Pipeline</div>
+            </div>
+            <div class="highlight-desc">
+              Tailored for Sri Lankan buyers with flat-rate island-wide delivery (Rs. 400), coupon code discounts, and
+              dual payment support: Cash on Delivery or instant card processing via Payments.lk.
+            </div>
+          </div>
+
+          <!-- Admin highlight -->
+          <div class="highlight-card">
+            <div class="highlight-header">
+              <div class="highlight-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <path d="M3 3v18h18"></path>
+                  <path d="M18 9l-5 5-4-4-3 3"></path>
+                </svg>
+              </div>
+              <div class="highlight-title">Admin Command Center</div>
+            </div>
+            <div class="highlight-desc">
+              Comprehensive inventory management, revenue and profit analytics, order dispatch pipeline, bundle
+              creators, and 2FA authenticator security gate.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 02: PRODUCTION SCREENS SHOWCASE -->
+  <section id="screens" style="background: rgba(8, 14, 23, 0.7);">
+    <div class="section-wrap">
+      <div class="section-eyebrow">02 — Visual Experience</div>
+      <h2 class="section-heading">Engineered for speed,<br><em>curated for elegance</em></h2>
+      <p class="section-sub">
+        Explore the 8 key mobile and desktop modules deployed in production. Click any screen card to inspect details
+        and architectural specifications.
+      </p>
+
+      <div class="screens-container">
+        <!-- CATEGORY FILTER BUTTONS -->
+        <div class="filter-tabs">
+          <button class="filter-btn active" data-filter="all">All Screens (8)</button>
+          <button class="filter-btn" data-filter="storefront">Storefront & Discovery</button>
+          <button class="filter-btn" data-filter="checkout">Checkout & Customer</button>
+          <button class="filter-btn" data-filter="admin">Admin & Operations</button>
+        </div>
+
+        <!-- SCREENS GRID -->
+        <div class="screens-grid">
+
+          <!-- Screen 1: Homepage -->
+          <div class="screen-item" data-category="storefront"
+            onclick="openLightbox('Homepage.jpeg', 'Storefront Homepage', 'Storefront & Discovery', 'The luxury hero storefront designed to captivate visitors with hot pink on blush accents, dynamic hero campaign slides, horizontal category chips, trust badges, and trending bestsellers.', ['React 19 SSR', 'Embla Carousel', 'Fast LCP', 'Island-wide delivery badges'])">
+            <div class="screen-preview-wrapper">
+              <img src="Homepage.jpeg" alt="Colombo Cosmetics Homepage" class="screen-preview-img" loading="lazy">
+              <div class="screen-click-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <span>Inspect Screen</span>
+              </div>
+            </div>
+            <div class="screen-info">
+              <div>
+                <div class="screen-category-tag">Storefront</div>
+                <div class="screen-title">Storefront Homepage</div>
+                <div class="screen-desc">Hero campaign carousels, category shortcuts, trust guarantees, and live
+                  bestsellers feed.</div>
+              </div>
+              <div class="screen-meta-pills">
+                <span class="screen-pill">Hero Banners</span>
+                <span class="screen-pill">Categories</span>
+                <span class="screen-pill">Bestsellers</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Screen 2: Shop Catalog -->
+          <div class="screen-item" data-category="storefront"
+            onclick="openLightbox('Shop.jpeg', 'All Products Catalog', 'Storefront & Discovery', 'High-performance catalog displaying 126+ cosmetics with instant client-side filtering, category counts, search input, featured sorting, sale badges, and instant wishlist toggles.', ['126+ Catalog Items', 'Instant Search', 'Pagination', 'Category Counts'])">
+            <div class="screen-preview-wrapper">
+              <img src="Shop.jpeg" alt="Colombo Cosmetics Shop Page" class="screen-preview-img" loading="lazy">
+              <div class="screen-click-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <span>Inspect Screen</span>
+              </div>
+            </div>
+            <div class="screen-info">
+              <div>
+                <div class="screen-category-tag">Discovery</div>
+                <div class="screen-title">Product Catalog & Filters</div>
+                <div class="screen-desc">Instant search, category count chips, filter modal, sort dropdown, and sale
+                  badges.</div>
+              </div>
+              <div class="screen-meta-pills">
+                <span class="screen-pill">Instant Search</span>
+                <span class="screen-pill">Live Counts</span>
+                <span class="screen-pill">Wishlist</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Screen 3: Product Detail Page -->
+          <div class="screen-item" data-category="storefront"
+            onclick="openLightbox('Product Detail.jpeg', 'Product Detail Experience', 'Storefront & Discovery', 'Rich product presentation with high-resolution imagery, variant switches, transparent pricing with discount comparisons, real-time stock counters, and delivery turnaround estimates.', ['Variant Selectors', 'Stock Counter', 'Island-wide ETA', 'Discount Badging'])">
+            <div class="screen-preview-wrapper">
+              <img src="Product Detail.jpeg" alt="Product Detail Page" class="screen-preview-img" loading="lazy">
+              <div class="screen-click-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <span>Inspect Screen</span>
+              </div>
+            </div>
+            <div class="screen-info">
+              <div>
+                <div class="screen-category-tag">Product Detail</div>
+                <div class="screen-title">Product Detail Page</div>
+                <div class="screen-desc">High-resolution photography, live stock availability, discount calculations,
+                  and shipping estimates.</div>
+              </div>
+              <div class="screen-meta-pills">
+                <span class="screen-pill">Live Stock</span>
+                <span class="screen-pill">Delivery ETA</span>
+                <span class="screen-pill">Price Savings</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Screen 4: Cart & Checkout -->
+          <div class="screen-item" data-category="checkout"
+            onclick="openLightbox('Cart.jpeg', 'Checkout & Order Summary', 'Checkout & Customer', 'Frictionless order checkout displaying line items, delivery fee calculation (Rs. 400 flat rate), promotional voucher input, and payment selection between Cash on Delivery and Payments.lk card processing.', ['Dual Payments', 'Promo Vouchers', 'Terms Checkbox', 'Payments.lk Gateway'])">
+            <div class="screen-preview-wrapper">
+              <img src="Cart.jpeg" alt="Colombo Cosmetics Cart & Checkout" class="screen-preview-img" loading="lazy">
+              <div class="screen-click-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <span>Inspect Screen</span>
+              </div>
+            </div>
+            <div class="screen-info">
+              <div>
+                <div class="screen-category-tag">Checkout</div>
+                <div class="screen-title">Checkout & Order Summary</div>
+                <div class="screen-desc">Order breakdown, coupon discount validator, Cash on Delivery, and Payments.lk
+                  card processing.</div>
+              </div>
+              <div class="screen-meta-pills">
+                <span class="screen-pill">COD & Card</span>
+                <span class="screen-pill">Coupon Codes</span>
+                <span class="screen-pill">Zod Validation</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Screen 5: Customer Account -->
+          <div class="screen-item" data-category="checkout"
+            onclick="openLightbox('Account.jpeg', 'Customer Account & Orders', 'Checkout & Customer', 'Self-service customer portal allowing shoppers to inspect active and completed orders, view pending delivery status (#1001 Pending), manage wishlist items, and save delivery addresses.', ['Order History', 'Status Tracking', 'Wishlist Hub', 'Self-Service'])">
+            <div class="screen-preview-wrapper">
+              <img src="Account.jpeg" alt="Customer Account" class="screen-preview-img" loading="lazy">
+              <div class="screen-click-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <span>Inspect Screen</span>
+              </div>
+            </div>
+            <div class="screen-info">
+              <div>
+                <div class="screen-category-tag">Customer Portal</div>
+                <div class="screen-title">Customer Account & Orders</div>
+                <div class="screen-desc">Order tracking (#1001 Pending), wishlist curation, saved shipping details, and
+                  account security.</div>
+              </div>
+              <div class="screen-meta-pills">
+                <span class="screen-pill">Order History</span>
+                <span class="screen-pill">Live Tracking</span>
+                <span class="screen-pill">Profile Settings</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Screen 6: Authentication -->
+          <div class="screen-item" data-category="checkout"
+            onclick="openLightbox('Login.jpeg', 'Customer Authentication', 'Checkout & Customer', 'Minimal, secure authentication portal powered by Supabase Auth with seamless toggle between Sign In and Registration, password reset flow, and session persistence.', ['Supabase Auth', 'Tabbed Switcher', 'Password Reset', 'JWT Security'])">
+            <div class="screen-preview-wrapper">
+              <img src="Login.jpeg" alt="Authentication Portal" class="screen-preview-img" loading="lazy">
+              <div class="screen-click-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <span>Inspect Screen</span>
+              </div>
+            </div>
+            <div class="screen-info">
+              <div>
+                <div class="screen-category-tag">Security</div>
+                <div class="screen-title">Customer Authentication</div>
+                <div class="screen-desc">Single-click toggle between Sign In and Registration, password reset, and
+                  encrypted session management.</div>
+              </div>
+              <div class="screen-meta-pills">
+                <span class="screen-pill">Supabase Auth</span>
+                <span class="screen-pill">Tabbed UI</span>
+                <span class="screen-pill">Session Sync</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Screen 7: Owner Admin Dashboard -->
+          <div class="screen-item" data-category="admin"
+            onclick="openLightbox('Admin Dashboard.jpeg', 'Owner Command Center', 'Admin & Operations', 'Full-spectrum administrative workspace for inventory management across 126 products, stock counts, variant editing, wholesale/retail tracking, banner scheduling, and order status updates.', ['Inventory Hub', 'Stock Alerts', 'Banner Scheduler', 'Audit Logs'])">
+            <div class="screen-preview-wrapper">
+              <img src="Admin Dashboard.jpeg" alt="Admin Dashboard" class="screen-preview-img" loading="lazy">
+              <div class="screen-click-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <span>Inspect Screen</span>
+              </div>
+            </div>
+            <div class="screen-info">
+              <div>
+                <div class="screen-category-tag">Operations</div>
+                <div class="screen-title">Owner Admin Dashboard</div>
+                <div class="screen-desc">Comprehensive store management: 126 products inventory, stock adjustments,
+                  banners, and coupon builder.</div>
+              </div>
+              <div class="screen-meta-pills">
+                <span class="screen-pill">Inventory Hub</span>
+                <span class="screen-pill">Stock Alerts</span>
+                <span class="screen-pill">Coupon Engine</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Screen 8: Admin 2FA Verification -->
+          <div class="screen-item" data-category="admin"
+            onclick="openLightbox('Admin Verification.jpeg', 'Two-Factor Admin Gate', 'Admin & Operations', 'Fortified security screen safeguarding store management tools. Requires 6-digit authenticator verification code before unlocking administrative privileges.', ['Authenticator 2FA', 'Row Level Security', 'Role-Based Access', 'Zero Trust'])">
+            <div class="screen-preview-wrapper">
+              <img src="Admin Verification.jpeg" alt="Admin Verification Gate" class="screen-preview-img"
+                loading="lazy">
+              <div class="screen-click-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <span>Inspect Screen</span>
+              </div>
+            </div>
+            <div class="screen-info">
+              <div>
+                <div class="screen-category-tag">Security Gate</div>
+                <div class="screen-title">Two-Factor Admin Gate</div>
+                <div class="screen-desc">6-digit authenticator app verification protecting sensitive revenue, profit,
+                  and customer order records.</div>
+              </div>
+              <div class="screen-meta-pills">
+                <span class="screen-pill">6-Digit Code</span>
+                <span class="screen-pill">2FA Verification</span>
+                <span class="screen-pill">Admin Role</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LIGHTBOX MODAL DIALOG -->
+  <div class="lightbox-modal" id="lightboxModal" onclick="closeLightboxOnBackdrop(event)">
+    <div class="lightbox-content">
+      <button class="lightbox-close-btn" onclick="closeLightbox()" aria-label="Close modal">✕</button>
+      <div class="lightbox-img-pane">
+        <img src="" alt="" id="lightboxImg" class="lightbox-img">
+      </div>
+      <div class="lightbox-sidebar">
+        <div>
+          <div class="lightbox-category" id="lightboxCategory">Storefront</div>
+          <h3 class="lightbox-title" id="lightboxTitle">Screen Title</h3>
+          <p class="lightbox-description" id="lightboxDesc">Detailed explanation of the screen and its business
+            function.</p>
+          <ul class="lightbox-spec-list" id="lightboxSpecs">
+            <!-- Dynamic specs inserted by JS -->
+          </ul>
+        </div>
+        <div style="font-family: var(--font-mono); font-size: 11px; color: var(--gray-400);">
+          Press ESC or click outside to dismiss
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 03: PLATFORM CAPABILITIES -->
+  <section class="features-section" id="features">
+    <div class="section-wrap">
+      <div class="section-eyebrow">03 — Capabilities Matrix</div>
+      <h2 class="section-heading">Everything a modern<br><em>e-commerce store demands</em></h2>
+      <p class="section-sub">
+        Carefully designed modules covering discovery, conversions, Sri Lankan payment settlement, and automated
+        merchant fulfillment.
+      </p>
+
+      <div class="features-grid">
+        <!-- Feature 1: Dynamic Catalog & Bundles -->
+        <div class="feature-box">
+          <div class="feature-box-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+              <polyline points="2 17 12 22 22 17"></polyline>
+              <polyline points="2 12 12 17 22 12"></polyline>
+            </svg>
+          </div>
+          <h3 class="feature-box-title">Dynamic Catalog & Bundles</h3>
+          <p class="feature-box-text">
+            126+ cosmetics catalog with multi-variant management (sizes, volumes, shades). Supports curated bundle
+            offers that bundle complementary skincare and perfumes at discounted price points.
+          </p>
+          <div class="feature-box-tags">
+            <span class="tag-sm">Variant Matrix</span>
+            <span class="tag-sm">Bundle Engine</span>
+            <span class="tag-sm">Real-time Stock</span>
+          </div>
+        </div>
+
+        <!-- Feature 2: Sri Lankan Checkout -->
+        <div class="feature-box">
+          <div class="feature-box-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+              <line x1="2" y1="10" x2="22" y2="10"></line>
+              <circle cx="7" cy="15" r="1" fill="currentColor"></circle>
+            </svg>
+          </div>
+          <h3 class="feature-box-title">Sri Lankan Checkout</h3>
+          <p class="feature-box-text">
+            Engineered specifically for local buying behaviors: Cash on Delivery (COD) with automated validation, and
+            card checkout via Payments.lk with HMAC-signed webhook verification.
+          </p>
+          <div class="feature-box-tags">
+            <span class="tag-sm">Payments.lk SDK</span>
+            <span class="tag-sm">Cash on Delivery</span>
+            <span class="tag-sm">Island-Wide Flat Rate</span>
+          </div>
+        </div>
+
+        <!-- Feature 3: Owner Analytics & Margins -->
+        <div class="feature-box">
+          <div class="feature-box-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <line x1="18" y1="20" x2="18" y2="10"></line>
+              <line x1="12" y1="20" x2="12" y2="4"></line>
+              <line x1="6" y1="20" x2="6" y2="14"></line>
+            </svg>
+          </div>
+          <h3 class="feature-box-title">Owner Analytics & Margins</h3>
+          <p class="feature-box-text">
+            Track gross merchandise value, average order value, order velocity, and profitability margins. Store
+            wholesale cost alongside retail price for automated margin tracking.
+          </p>
+          <div class="feature-box-tags">
+            <span class="tag-sm">Recharts Analytics</span>
+            <span class="tag-sm">Profit Margins</span>
+            <span class="tag-sm">Sales Velocity</span>
+          </div>
+        </div>
+
+        <!-- Feature 4: Vouchers & Hero Banners -->
+        <div class="feature-box">
+          <div class="feature-box-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"></path>
+              <line x1="7" y1="7" x2="7.01" y2="7"></line>
+            </svg>
+          </div>
+          <h3 class="feature-box-title">Vouchers & Hero Banners</h3>
+          <p class="feature-box-text">
+            In-app coupon generator supporting percentage discounts and fixed value deductions with expiration dates and
+            minimum spends. Real-time banner scheduler for homepage promotions.
+          </p>
+          <div class="feature-box-tags">
+            <span class="tag-sm">Coupon Engine</span>
+            <span class="tag-sm">Banner Carousel</span>
+            <span class="tag-sm">Campaigns</span>
+          </div>
+        </div>
+
+        <!-- Feature 5: Guest Order Tracking -->
+        <div class="feature-box">
+          <div class="feature-box-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <rect x="1" y="3" width="15" height="13"></rect>
+              <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+              <circle cx="5.5" cy="18.5" r="2.5"></circle>
+              <circle cx="18.5" cy="18.5" r="2.5"></circle>
+            </svg>
+          </div>
+          <h3 class="feature-box-title">Guest Order Tracking</h3>
+          <p class="feature-box-text">
+            Dedicated guest order tracking portal allowing buyers to trace their parcel using order reference and phone
+            number without requiring an account. Instant WhatsApp notification support.
+          </p>
+          <div class="feature-box-tags">
+            <span class="tag-sm">Order Tracking</span>
+            <span class="tag-sm">WhatsApp Integration</span>
+            <span class="tag-sm">SMTP Emails</span>
+          </div>
+        </div>
+
+        <!-- Feature 6: Enterprise-Grade Security -->
+        <div class="feature-box">
+          <div class="feature-box-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+          </div>
+          <h3 class="feature-box-title">Enterprise-Grade Security</h3>
+          <p class="feature-box-text">
+            Supabase Row Level Security (RLS) protects customer records. Critical admin operations require 2FA
+            authenticator verification. Atomic SQL transactions prevent inventory overselling.
+          </p>
+          <div class="feature-box-tags">
+            <span class="tag-sm">PostgreSQL RLS</span>
+            <span class="tag-sm">2FA Authenticator</span>
+            <span class="tag-sm">Atomic Stock Locking</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 04: ARCHITECTURE & TECH STACK (WITH REAL CONTEXT LOGOS) -->
+  <section class="tech-stack-section" id="tech">
+    <div class="section-wrap">
+      <div class="section-eyebrow">04 — Technology Stack</div>
+      <h2 class="section-heading">Modern, type-safe,<br><em>and hyper-resilient</em></h2>
+      <p class="section-sub">
+        A production-hardened full-stack TypeScript stack chosen for developer velocity, SSR page-load speeds, and
+        rock-solid transactional integrity.
+      </p>
+
+      <div class="tech-category-grid">
+
+        <!-- Group 1: Framework & Core -->
+        <div class="tech-group-card">
+          <div class="tech-group-header">
+            <div class="tech-group-title">
+              <svg class="tech-group-header-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                <polyline points="2 17 12 22 22 17"></polyline>
+                <polyline points="2 12 12 17 22 12"></polyline>
+              </svg>
+              Meta-Framework & Core
+            </div>
+            <div class="tech-group-tag">Frontend & SSR</div>
+          </div>
+          <div class="tech-items-grid">
+            <!-- React 19 -->
+            <div class="tech-pill-box">
+              <div class="tech-pill-logo">
+                <svg viewBox="-11.5 -10.2 23 20.4" fill="none">
+                  <circle cx="0" cy="0" r="2.05" fill="#58C4DC" />
+                  <g stroke="#58C4DC" stroke-width="1">
+                    <ellipse rx="11" ry="4.2" />
+                    <ellipse rx="11" ry="4.2" transform="rotate(60)" />
+                    <ellipse rx="11" ry="4.2" transform="rotate(120)" />
+                  </g>
+                </svg>
+              </div>
+              <div>
+                <div class="tech-pill-name">React 19</div>
+                <div class="tech-pill-role">Latest UI Runtime</div>
+              </div>
+            </div>
+            <!-- TanStack Start -->
+            <div class="tech-pill-box">
+              <div class="tech-pill-logo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#FF4154" stroke-width="2.2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                  <polyline points="2 17 12 22 22 17"></polyline>
+                  <polyline points="2 12 12 17 22 12"></polyline>
+                </svg>
+              </div>
+              <div>
+                <div class="tech-pill-name">TanStack Start</div>
+                <div class="tech-pill-role">Full-Stack SSR Framework</div>
+              </div>
+            </div>
+            <!-- TanStack Router -->
+            <div class="tech-pill-box">
+              <div class="tech-pill-logo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#FF85B8" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <circle cx="18" cy="5" r="3"></circle>
+                  <circle cx="6" cy="12" r="3"></circle>
+                  <circle cx="18" cy="19" r="3"></circle>
+                  <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                  <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                </svg>
+              </div>
+              <div>
+                <div class="tech-pill-name">TanStack Router</div>
+                <div class="tech-pill-role">Type-Safe Routing</div>
+              </div>
+            </div>
+            <!-- Vite & Nitro -->
+            <div class="tech-pill-box">
+              <div class="tech-pill-logo">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M21.5 3.5L12.7 21a.8.8 0 01-1.4 0L2.5 3.5a.8.8 0 01.9-1.1l8.3 1.7a.8.8 0 00.3 0l8.6-1.7a.8.8 0 01.9 1.1z"
+                    fill="url(#techVite)" />
+                  <path
+                    d="M15.5 2.5L7.2 13.8a.4.4 0 00.3.6h4.3l-1.5 5.8a.4.4 0 00.7.3l7.6-11.2a.4.4 0 00-.3-.6h-4l1.2-6.2z"
+                    fill="#FFD026" />
+                  <defs>
+                    <linearGradient id="techVite" x1="2" y1="2" x2="22" y2="21" gradientUnits="userSpaceOnUse">
+                      <stop stop-color="#41D1FF" />
+                      <stop offset="1" stop-color="#BD34FE" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </div>
+              <div>
+                <div class="tech-pill-name">Vite & Nitro</div>
+                <div class="tech-pill-role">Build & Server Engine</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Group 2: UI & Styling -->
+        <div class="tech-group-card">
+          <div class="tech-group-header">
+            <div class="tech-group-title">
+              <svg class="tech-group-header-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z">
+                </path>
+              </svg>
+              Styling & Interaction
+            </div>
+            <div class="tech-group-tag">Design System</div>
+          </div>
+          <div class="tech-items-grid">
+            <!-- Tailwind CSS v4 -->
+            <div class="tech-pill-box">
+              <div class="tech-pill-logo">
+                <svg viewBox="0 0 24 24" fill="#38BDF8">
+                  <path
+                    d="M12 6c-3 0-4.8 1.5-5.4 4.5 1.2-1.5 2.7-2.1 4.5-1.8 1 .2 1.8 1 2.6 1.8 1.3 1.4 2.9 3 6.3 3 3 0 4.8-1.5 5.4-4.5-1.2 1.5-2.7 2.1-4.5 1.8-1-.2-1.8-1-2.6-1.8C17.1 7.6 15.4 6 12 6zm-6 6c-3 0-4.8 1.5-5.4 4.5 1.2-1.5 2.7-2.1 4.5-1.8 1 .2 1.8 1 2.6 1.8 1.3 1.4 2.9 3 6.3 3 3 0 4.8-1.5 5.4-4.5-1.2 1.5-2.7 2.1-4.5 1.8-1-.2-1.8-1-2.6-1.8C11.1 13.6 9.4 12 6 12z" />
+                </svg>
+              </div>
+              <div>
+                <div class="tech-pill-name">Tailwind CSS v4</div>
+                <div class="tech-pill-role">Next-Gen CSS Engine</div>
+              </div>
+            </div>
+            <!-- Radix UI -->
+            <div class="tech-pill-box">
+              <div class="tech-pill-logo">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <circle cx="6" cy="6" r="3" fill="#FFF" />
+                  <path d="M15 3h6v6h-6z" fill="#FFF" />
+                  <path d="M3 15h6v6H3z" fill="#FFF" />
+                  <path d="M15 15h6v6h-6z" fill="var(--pink)" />
+                </svg>
+              </div>
+              <div>
+                <div class="tech-pill-name">Radix UI</div>
+                <div class="tech-pill-role">Accessible Primitives</div>
+              </div>
+            </div>
+            <!-- Lucide Icons -->
+            <div class="tech-pill-box">
+              <div class="tech-pill-logo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#F56565" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+              </div>
+              <div>
+                <div class="tech-pill-name">Lucide React</div>
+                <div class="tech-pill-role">Iconography</div>
+              </div>
+            </div>
+            <!-- Recharts -->
+            <div class="tech-pill-box">
+              <div class="tech-pill-logo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <line x1="18" y1="20" x2="18" y2="10"></line>
+                  <line x1="12" y1="20" x2="12" y2="4"></line>
+                  <line x1="6" y1="20" x2="6" y2="14"></line>
+                </svg>
+              </div>
+              <div>
+                <div class="tech-pill-name">Recharts</div>
+                <div class="tech-pill-role">Analytics & Margins</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Group 3: Data & Security -->
+        <div class="tech-group-card">
+          <div class="tech-group-header">
+            <div class="tech-group-title">
+              <svg class="tech-group-header-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z">
+                </path>
+              </svg>
+              Data & Security
+            </div>
+            <div class="tech-group-tag">Database & Auth</div>
+          </div>
+          <div class="tech-items-grid">
+            <!-- Supabase -->
+            <div class="tech-pill-box">
+              <div class="tech-pill-logo">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M13.4 2.1a1 1 0 00-1.6.8v8.6h8.2a1 1 0 01.7 1.7L10.6 23.3a1 1 0 01-1.6-.8v-8.6H.8a1 1 0 01-.7-1.7L13.4 2.1z"
+                    fill="url(#techSupa)" />
+                  <defs>
+                    <linearGradient id="techSupa" x1="0" y1="2" x2="21" y2="23" gradientUnits="userSpaceOnUse">
+                      <stop stop-color="#3ECF8E" />
+                      <stop offset="1" stop-color="#24B47E" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </div>
+              <div>
+                <div class="tech-pill-name">Supabase PostgreSQL</div>
+                <div class="tech-pill-role">Relational Cloud DB</div>
+              </div>
+            </div>
+            <!-- Row-Level Security -->
+            <div class="tech-pill-box">
+              <div class="tech-pill-logo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#F02D7D" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                  <path d="M7 11V7a5 5 0 0110 0v4"></path>
+                </svg>
+              </div>
+              <div>
+                <div class="tech-pill-name">Row Level Security</div>
+                <div class="tech-pill-role">Enforced Isolation</div>
+              </div>
+            </div>
+            <!-- Supabase Auth -->
+            <div class="tech-pill-box">
+              <div class="tech-pill-logo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#A78BFA" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </div>
+              <div>
+                <div class="tech-pill-name">Supabase Auth</div>
+                <div class="tech-pill-role">Customer & Admin Identity</div>
+              </div>
+            </div>
+            <!-- Zod -->
+            <div class="tech-pill-box">
+              <div class="tech-pill-logo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#3E63DD" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                  <path d="M9 12l2 2 4-4"></path>
+                </svg>
+              </div>
+              <div>
+                <div class="tech-pill-name">Zod & Hook Form</div>
+                <div class="tech-pill-role">Schema Validation</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Group 4: Payments & Infrastructure -->
+        <div class="tech-group-card">
+          <div class="tech-group-header">
+            <div class="tech-group-title">
+              <svg class="tech-group-header-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+                <line x1="2" y1="10" x2="22" y2="10"></line>
+              </svg>
+              Payments & Services
+            </div>
+            <div class="tech-group-tag">Integrations</div>
+          </div>
+          <div class="tech-items-grid">
+            <!-- Payments.lk -->
+            <div class="tech-pill-box">
+              <div class="tech-pill-logo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#F02D7D" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+                  <line x1="2" y1="10" x2="22" y2="10"></line>
+                  <circle cx="7" cy="15" r="1" fill="#F02D7D"></circle>
+                </svg>
+              </div>
+              <div>
+                <div class="tech-pill-name">Payments.lk SDK</div>
+                <div class="tech-pill-role">Visa/Mastercard Gateway</div>
+              </div>
+            </div>
+            <!-- Nodemailer -->
+            <div class="tech-pill-box">
+              <div class="tech-pill-logo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#60A5FA" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                  <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+              </div>
+              <div>
+                <div class="tech-pill-name">Nodemailer SMTP</div>
+                <div class="tech-pill-role">Transactional Order Emails</div>
+              </div>
+            </div>
+            <!-- WhatsApp -->
+            <div class="tech-pill-box">
+              <div class="tech-pill-logo">
+                <svg viewBox="0 0 24 24" fill="#25D366">
+                  <path
+                    d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0012.04 2zm5.78 14.07c-.24.68-1.22 1.27-1.83 1.35-.49.07-1.12.1-3.23-.77-2.69-1.11-4.42-3.85-4.56-4.03-.13-.18-1.09-1.46-1.09-2.78 0-1.32.69-1.97.94-2.24.25-.26.54-.33.72-.33.18 0 .36 0 .52.01.17.01.4-.06.62.48.24.57.81 1.98.88 2.12.07.14.12.31.02.5-.09.19-.14.31-.28.47-.14.16-.3.35-.43.47-.15.14-.3.29-.13.58.17.29.76 1.25 1.63 2.02 1.12.99 2.07 1.3 2.36 1.44.29.14.46.12.63-.07.17-.19.74-.86.94-1.16.2-.29.4-.24.67-.14.28.1.1.75 3.53 1.77.29.14.48.21.55.32.07.11.07.64-.17 1.32z" />
+                </svg>
+              </div>
+              <div>
+                <div class="tech-pill-name">WhatsApp Links</div>
+                <div class="tech-pill-role">Support & Alerts</div>
+              </div>
+            </div>
+            <!-- Vercel -->
+            <div class="tech-pill-box">
+              <div class="tech-pill-logo">
+                <svg viewBox="0 0 24 24" fill="#FFF">
+                  <path d="M12 2L24 22H0L12 2z" />
+                </svg>
+              </div>
+              <div>
+                <div class="tech-pill-name">Vercel Edge</div>
+                <div class="tech-pill-role">Global Deployment</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 05: PROCESS & ENGINEERING LEADERSHIP -->
+  <section class="process-section" id="architecture">
+    <div class="section-wrap">
+      <div class="section-eyebrow">05 — Engineering Journey</div>
+      <h2 class="section-heading">From discovery to<br><em>production deployment</em></h2>
+      <p class="section-sub">
+        How the system was designed, validated, and rolled out to replace legacy spreadsheets with an end-to-end
+        commerce architecture.
+      </p>
+
+      <div class="process-grid">
+
+        <div class="process-timeline">
+          <div class="process-card">
+            <div class="process-step-badge">01</div>
+            <div class="process-content">
+              <h4>Requirements Discovery & Commerce Modeling</h4>
+              <p>Analyzed customer purchase habits in Sri Lanka, inventory replenishment bottlenecks, and delivery
+                workflows to establish the schema for variants, wholesale costs, and order statuses.</p>
+            </div>
+          </div>
+
+          <div class="process-card">
+            <div class="process-step-badge">02</div>
+            <div class="process-content">
+              <h4>Design System & Mobile-First UX</h4>
+              <p>Formulated the brand aesthetic: editorial serif headlines (Playfair Display), clear sans-serif body
+                typography (Poppins), and signature hot-pink glows with high-contrast readable dark cards.</p>
+            </div>
+          </div>
+
+          <div class="process-card">
+            <div class="process-step-badge">03</div>
+            <div class="process-content">
+              <h4>Full-Stack SSR Implementation</h4>
+              <p>Engineered the solution on TanStack Start and React 19. Implemented type-safe server functions, cache
+                invalidation with TanStack Query, and lightning-fast page transitions.</p>
+            </div>
+          </div>
+
+          <div class="process-card">
+            <div class="process-step-badge">04</div>
+            <div class="process-content">
+              <h4>Payment Gateways & Webhooks</h4>
+              <p>Built dual checkout flows for COD and Payments.lk card processing. Implemented signed webhook
+                verification endpoints to handle payment states securely and trigger order confirmations.</p>
+            </div>
+          </div>
+
+          <div class="process-card">
+            <div class="process-step-badge">05</div>
+            <div class="process-content">
+              <h4>Admin Center & 2FA Security Gate</h4>
+              <p>Constructed the administrative suite with 2FA authenticator verification, inventory stock controls,
+                wholesale margin tracking, bundle management, and automated database audit logging.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="architect-card">
+          <h3>Architecture & Execution</h3>
+          <p>
+            Executed as an end-to-end engineering initiative covering system architecture, user interface design,
+            full-stack implementation, and deployment:
+          </p>
+          <ul class="role-bullet-list">
+            <li>
+              <span class="role-marker"></span>
+              Full-stack architecture leveraging TanStack Start (SSR) & React 19
+            </li>
+            <li>
+              <span class="role-marker"></span>
+              Tailwind CSS v4 design system with custom OKLCH color palettes
+            </li>
+            <li>
+              <span class="role-marker"></span>
+              Supabase PostgreSQL relational modeling, migrations, and Row-Level Security
+            </li>
+            <li>
+              <span class="role-marker"></span>
+              Payments.lk Node SDK card integration with HMAC webhook validation
+            </li>
+            <li>
+              <span class="role-marker"></span>
+              Cash on Delivery order verification & automated invoice generation
+            </li>
+            <li>
+              <span class="role-marker"></span>
+              Multi-factor authenticator gate securing the administrative workspace
+            </li>
+            <li>
+              <span class="role-marker"></span>
+              Real-time stock reservation and atomic inventory deduction logic
+            </li>
+            <li>
+              <span class="role-marker"></span>
+              Transactional email automation via Nodemailer and WhatsApp order integration
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="section-wrap">
+      <div class="footer-logo">Colombo <em>Cosmetics</em></div>
+      <div class="footer-tagline">Your Beauty and Fragrance Companion · 2026</div>
+      <div class="footer-links">
+        <a href="#hero">Back to Top</a>
+        <a href="#overview">Overview</a>
+        <a href="#screens">Screens Gallery</a>
+        <a href="#features">Features</a>
+        <a href="#tech">Tech Stack</a>
+        <a href="#architecture">Architecture</a>
+      </div>
+      <div class="footer-copy">
+        © 2026 Colombo Cosmetics · Full-Stack Platform Case Study
+      </div>
+    </div>
+  </footer>
+
+  <!-- INTERACTIVE LIGHTBOX & FILTER SCRIPT -->
+  <script>
+    // Screen Category Filtering
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const screenItems = document.querySelectorAll('.screen-item');
+
+    filterButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+
+        const filter = button.getAttribute('data-filter');
+
+        screenItems.forEach(item => {
+          if (filter === 'all' || item.getAttribute('data-category') === filter) {
+            item.style.display = 'flex';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // Lightbox modal logic
+    const modal = document.getElementById('lightboxModal');
+    const modalImg = document.getElementById('lightboxImg');
+    const modalTitle = document.getElementById('lightboxTitle');
+    const modalCategory = document.getElementById('lightboxCategory');
+    const modalDesc = document.getElementById('lightboxDesc');
+    const modalSpecs = document.getElementById('lightboxSpecs');
+
+    function openLightbox(imgSrc, title, category, description, specs) {
+      modalImg.src = imgSrc;
+      modalImg.alt = title;
+      modalTitle.textContent = title;
+      modalCategory.textContent = category;
+      modalDesc.textContent = description;
+
+      // Populate specs list with clean SVG checkmarks
+      modalSpecs.innerHTML = '';
+      if (Array.isArray(specs)) {
+        specs.forEach(spec => {
+          const li = document.createElement('li');
+          li.innerHTML = `
+            <svg class="spec-bullet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span>${spec}</span>
+          `;
+          modalSpecs.appendChild(li);
+        });
+      }
+
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function closeLightboxOnBackdrop(e) {
+      if (e.target === modal) {
+        closeLightbox();
+      }
+    }
+
+    // Keyboard support: ESC closes lightbox
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('active')) {
+        closeLightbox();
+      }
+    });
+  </script>
+
+</body>
+
+</html>
