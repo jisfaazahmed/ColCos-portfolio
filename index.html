@@ -62,16 +62,21 @@
       background-attachment: fixed;
     }
 
+    /* ── SECTION SCROLL OFFSET ── */
+    section[id] {
+      scroll-margin-top: 80px;
+    }
+
     /* ── HEADER / NAVIGATION ── */
     .site-nav {
       position: sticky;
       top: 0;
-      z-index: 100;
-      background: rgba(6, 11, 18, 0.85);
+      z-index: 200;
+      background: rgba(6, 11, 18, 0.88);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-      transition: all 0.3s ease;
+      transition: background 0.3s ease, border-color 0.3s ease;
     }
 
     .nav-container {
@@ -81,6 +86,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 16px;
     }
 
     .brand-link {
@@ -88,6 +94,8 @@
       display: flex;
       align-items: center;
       gap: 12px;
+      flex-shrink: 0;
+      min-width: 0;
     }
 
     .brand-logo-text {
@@ -96,6 +104,7 @@
       font-weight: 600;
       color: var(--white);
       letter-spacing: -0.5px;
+      white-space: nowrap;
     }
 
     .brand-logo-text span {
@@ -114,6 +123,8 @@
       color: var(--pink-light);
       border-radius: 999px;
       display: inline-block;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .nav-menu {
@@ -129,10 +140,18 @@
       font-size: 13px;
       font-weight: 500;
       transition: color 0.2s ease;
+      white-space: nowrap;
     }
 
     .nav-menu a:hover {
       color: var(--white);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
     }
 
     .nav-cta {
@@ -148,6 +167,7 @@
       text-decoration: none;
       box-shadow: 0 4px 18px rgba(240, 45, 125, 0.35);
       transition: transform 0.2s ease, box-shadow 0.2s ease;
+      white-space: nowrap;
     }
 
     .nav-cta:hover {
@@ -161,6 +181,254 @@
 
     .nav-cta:hover svg {
       transform: translateY(2px);
+    }
+
+    /* ── HAMBURGER TOGGLE BUTTON ── */
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 42px;
+      height: 42px;
+      padding: 0;
+      background: rgba(18, 30, 48, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      position: relative;
+      z-index: 101;
+      gap: 5px;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .nav-toggle:hover,
+    .nav-toggle:focus-visible {
+      background: rgba(240, 45, 125, 0.14);
+      border-color: rgba(240, 45, 125, 0.45);
+      box-shadow: 0 0 16px rgba(240, 45, 125, 0.25);
+      outline: none;
+    }
+
+    .hamburger-line {
+      display: block;
+      width: 20px;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease, background-color 0.2s ease;
+      transform-origin: center;
+    }
+
+    /* Active X transformation */
+    .nav-toggle.active {
+      background: rgba(240, 45, 125, 0.18);
+      border-color: var(--pink);
+      box-shadow: 0 0 18px rgba(240, 45, 125, 0.35);
+    }
+
+    .nav-toggle.active .line-1 {
+      transform: translateY(7px) rotate(45deg);
+      background: var(--pink-light);
+    }
+
+    .nav-toggle.active .line-2 {
+      opacity: 0;
+      transform: scaleX(0);
+    }
+
+    .nav-toggle.active .line-3 {
+      transform: translateY(-7px) rotate(-45deg);
+      background: var(--pink-light);
+    }
+
+    /* ── MOBILE NAVIGATION DRAWER ── */
+    .mobile-drawer {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      width: 100%;
+      background: rgba(6, 11, 18, 0.96);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid rgba(240, 45, 125, 0.22);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 25px rgba(240, 45, 125, 0.08);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px);
+      transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s;
+      pointer-events: none;
+      max-height: calc(100vh - 65px);
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      z-index: 100;
+    }
+
+    .mobile-drawer.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .mobile-drawer-inner {
+      padding: 18px 20px 24px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .mobile-drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 12px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .mobile-drawer-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.8px;
+      color: var(--gray-400);
+    }
+
+    .mobile-drawer-badge {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--pink-light);
+      background: var(--pink-dim);
+      border: 1px solid var(--pink-border);
+      padding: 2px 8px;
+      border-radius: 999px;
+      letter-spacing: 1px;
+    }
+
+    .mobile-nav-links {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      list-style: none;
+    }
+
+    .mobile-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: rgba(18, 30, 48, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      text-decoration: none;
+      transition: all 0.22s ease;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .mobile-nav-item:hover,
+    .mobile-nav-item:focus-visible {
+      background: rgba(240, 45, 125, 0.12);
+      border-color: rgba(240, 45, 125, 0.35);
+      transform: translateX(4px);
+      outline: none;
+    }
+
+    .mobile-nav-num {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--pink-light);
+      background: rgba(240, 45, 125, 0.14);
+      border: 1px solid rgba(240, 45, 125, 0.22);
+      padding: 4px 7px;
+      border-radius: 6px;
+      min-width: 28px;
+      text-align: center;
+    }
+
+    .mobile-nav-text {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .mobile-nav-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--white);
+    }
+
+    .mobile-nav-sub {
+      font-size: 11px;
+      color: var(--gray-400);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .mobile-nav-arrow {
+      color: var(--gray-400);
+      transition: transform 0.2s ease, color 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .mobile-nav-item:hover .mobile-nav-arrow,
+    .mobile-nav-item:focus-visible .mobile-nav-arrow {
+      color: var(--pink-glow);
+      transform: translateX(3px);
+    }
+
+    .mobile-drawer-cta-wrap {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .mobile-drawer-cta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 13px 20px;
+      background: linear-gradient(135deg, var(--pink), var(--pink-glow));
+      color: var(--white);
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 999px;
+      text-decoration: none;
+      box-shadow: 0 4px 18px rgba(240, 45, 125, 0.35);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      touch-action: manipulation;
+    }
+
+    .mobile-drawer-cta:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 24px rgba(240, 45, 125, 0.5);
+    }
+
+    /* ── MOBILE BACKDROP OVERLAY ── */
+    .mobile-nav-backdrop {
+      position: fixed;
+      inset: 0;
+      top: 0;
+      background: rgba(4, 8, 14, 0.72);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      z-index: 99;
+    }
+
+    .mobile-nav-backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
     }
 
     /* ── HERO ── */
@@ -1274,8 +1542,33 @@
     }
 
     @media (max-width: 860px) {
+      section[id] {
+        scroll-margin-top: 68px;
+      }
+
+      .site-nav {
+        background: rgba(6, 11, 18, 0.94);
+      }
+
+      .nav-container {
+        padding: 12px 20px;
+      }
+
+      .brand-logo-text {
+        font-size: 20px;
+      }
+
       .nav-menu {
         display: none;
+      }
+
+      .nav-toggle {
+        display: flex;
+      }
+
+      .nav-cta {
+        padding: 7px 14px;
+        font-size: 11px;
       }
 
       .overview-grid,
@@ -1316,6 +1609,46 @@
     }
 
     @media (max-width: 540px) {
+      .nav-container {
+        padding: 10px 16px;
+      }
+
+      .brand-link {
+        gap: 8px;
+      }
+
+      .brand-logo-text {
+        font-size: 17.5px;
+      }
+
+      .brand-pill {
+        font-size: 9px;
+        padding: 2px 7px;
+        letter-spacing: 1px;
+      }
+
+      /* Keep header bar uncluttered on phones; full CTA is inside the mobile drawer */
+      .nav-actions .nav-cta {
+        display: none;
+      }
+
+      .mobile-drawer-inner {
+        padding: 16px 16px 20px;
+      }
+
+      .mobile-nav-item {
+        padding: 10px 12px;
+        gap: 10px;
+      }
+
+      .mobile-nav-title {
+        font-size: 13.5px;
+      }
+
+      .mobile-nav-sub {
+        font-size: 10.5px;
+      }
+
       .screens-grid {
         grid-template-columns: 1fr;
       }
@@ -1347,15 +1680,29 @@
         justify-content: center;
       }
     }
+
+    @media (max-width: 380px) {
+      .nav-container {
+        padding: 9px 12px;
+      }
+
+      .brand-logo-text {
+        font-size: 16px;
+      }
+
+      .brand-pill {
+        display: none;
+      }
+    }
   </style>
 </head>
 
 <body>
 
   <!-- STICKY TOP NAVIGATION -->
-  <header class="site-nav">
+  <header class="site-nav" id="siteNav">
     <div class="nav-container">
-      <a href="#hero" class="brand-link">
+      <a href="#hero" class="brand-link" aria-label="Colombo Cosmetics Home">
         <div class="brand-logo-text">Colombo <span>Cosmetics</span></div>
         <div class="brand-pill">Case Study</div>
       </a>
@@ -1366,15 +1713,96 @@
         <li><a href="#tech">Tech Stack</a></li>
         <li><a href="#architecture">Architecture</a></li>
       </ul>
-      <a href="#screens" class="nav-cta">
-        <span>Explore Showcase</span>
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-          stroke-linecap="round" stroke-linejoin="round">
-          <line x1="12" y1="5" x2="12" y2="19"></line>
-          <polyline points="19 12 12 19 5 12"></polyline>
-        </svg>
-      </a>
+      <div class="nav-actions">
+        <a href="#screens" class="nav-cta">
+          <span>Explore Showcase</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <polyline points="19 12 12 19 5 12"></polyline>
+          </svg>
+        </a>
+        <button class="nav-toggle" id="navToggle" type="button" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobileDrawer">
+          <span class="hamburger-line line-1"></span>
+          <span class="hamburger-line line-2"></span>
+          <span class="hamburger-line line-3"></span>
+        </button>
+      </div>
     </div>
+
+    <!-- MOBILE NAVIGATION DRAWER -->
+    <div class="mobile-drawer" id="mobileDrawer" aria-hidden="true">
+      <div class="mobile-drawer-inner">
+        <div class="mobile-drawer-header">
+          <span class="mobile-drawer-label">Case Study Sections</span>
+          <span class="mobile-drawer-badge">Full-Stack Commerce</span>
+        </div>
+        <nav class="mobile-nav-links">
+          <a href="#overview" class="mobile-nav-item">
+            <span class="mobile-nav-num">01</span>
+            <div class="mobile-nav-text">
+              <span class="mobile-nav-title">Overview</span>
+              <span class="mobile-nav-sub">Core problems & business impact</span>
+            </div>
+            <svg class="mobile-nav-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </a>
+          <a href="#screens" class="mobile-nav-item">
+            <span class="mobile-nav-num">02</span>
+            <div class="mobile-nav-text">
+              <span class="mobile-nav-title">Production Screens</span>
+              <span class="mobile-nav-sub">Interactive UI gallery & walkthrough</span>
+            </div>
+            <svg class="mobile-nav-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </a>
+          <a href="#features" class="mobile-nav-item">
+            <span class="mobile-nav-num">03</span>
+            <div class="mobile-nav-text">
+              <span class="mobile-nav-title">Key Features</span>
+              <span class="mobile-nav-sub">Cart, localized checkout & admin hub</span>
+            </div>
+            <svg class="mobile-nav-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </a>
+          <a href="#tech" class="mobile-nav-item">
+            <span class="mobile-nav-num">04</span>
+            <div class="mobile-nav-text">
+              <span class="mobile-nav-title">Tech Stack</span>
+              <span class="mobile-nav-sub">React 19, TanStack Start & Supabase</span>
+            </div>
+            <svg class="mobile-nav-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </a>
+          <a href="#architecture" class="mobile-nav-item">
+            <span class="mobile-nav-num">05</span>
+            <div class="mobile-nav-text">
+              <span class="mobile-nav-title">Architecture</span>
+              <span class="mobile-nav-sub">Database schemas & workflows</span>
+            </div>
+            <svg class="mobile-nav-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </a>
+        </nav>
+        <div class="mobile-drawer-cta-wrap">
+          <a href="#screens" class="mobile-drawer-cta">
+            <span>Explore Production Showcase</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- BACKDROP OVERLAY -->
+    <div class="mobile-nav-backdrop" id="mobileNavBackdrop" aria-hidden="true"></div>
   </header>
 
   <!-- HERO SECTION -->
@@ -2589,6 +3017,86 @@
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && modal.classList.contains('active')) {
         closeLightbox();
+      }
+    });
+
+    // ── MOBILE NAVIGATION DRAWER CONTROLLER ──
+    const siteNav = document.getElementById('siteNav');
+    const navToggle = document.getElementById('navToggle');
+    const mobileDrawer = document.getElementById('mobileDrawer');
+    const mobileNavBackdrop = document.getElementById('mobileNavBackdrop');
+    const mobileDrawerLinks = document.querySelectorAll('.mobile-nav-item, .mobile-drawer-cta');
+
+    function openMobileNav() {
+      if (!navToggle || !mobileDrawer) return;
+      navToggle.classList.add('active');
+      navToggle.setAttribute('aria-expanded', 'true');
+      mobileDrawer.classList.add('active');
+      mobileDrawer.setAttribute('aria-hidden', 'false');
+      if (mobileNavBackdrop) {
+        mobileNavBackdrop.classList.add('active');
+        mobileNavBackdrop.setAttribute('aria-hidden', 'false');
+      }
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeMobileNav() {
+      if (!navToggle || !mobileDrawer) return;
+      navToggle.classList.remove('active');
+      navToggle.setAttribute('aria-expanded', 'false');
+      mobileDrawer.classList.remove('active');
+      mobileDrawer.setAttribute('aria-hidden', 'true');
+      if (mobileNavBackdrop) {
+        mobileNavBackdrop.classList.remove('active');
+        mobileNavBackdrop.setAttribute('aria-hidden', 'true');
+      }
+      // Only restore scroll if lightbox is not active
+      if (!modal || !modal.classList.contains('active')) {
+        document.body.style.overflow = '';
+      }
+    }
+
+    if (navToggle) {
+      navToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = navToggle.classList.contains('active');
+        if (isOpen) {
+          closeMobileNav();
+        } else {
+          openMobileNav();
+        }
+      });
+    }
+
+    if (mobileNavBackdrop) {
+      mobileNavBackdrop.addEventListener('click', closeMobileNav);
+    }
+
+    // Close mobile drawer when any link inside it is tapped
+    mobileDrawerLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        closeMobileNav();
+      });
+    });
+
+    // Close when tapping outside the header navigation
+    document.addEventListener('click', (e) => {
+      if (siteNav && !siteNav.contains(e.target) && navToggle && navToggle.classList.contains('active')) {
+        closeMobileNav();
+      }
+    });
+
+    // Close mobile nav on ESC key
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && navToggle && navToggle.classList.contains('active')) {
+        closeMobileNav();
+      }
+    });
+
+    // Auto-close drawer if screen is resized back to desktop
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 860 && navToggle && navToggle.classList.contains('active')) {
+        closeMobileNav();
       }
     });
   </script>
